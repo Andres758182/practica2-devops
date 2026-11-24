@@ -1,0 +1,26 @@
+name: Notificar cambios por correo
+
+on:
+  push:
+    branches: [main, feature_a, feature_b]
+
+jobs:
+  enviar-correo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enviar correo
+        uses: dawidd6/action-send-mail@v16
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: Cambios subidos a rama ${{ github.ref_name }}
+          to: andresolv123@gmail.com, papaguiyololi@gmail.com, delgadillolanderosjorge@gmail.com
+          from: ${{ secrets.MAIL_USERNAME }}
+          body: |
+            Se subieron cambios a la rama ${{ github.ref_name }}.
+            Autor: ${{ github.actor }}
+            Commit: ${{ github.event.head_commit.message }}
+            Repo: ${{ github.server_url }}/${{ github.repository }}
